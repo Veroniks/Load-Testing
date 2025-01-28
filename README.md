@@ -28,4 +28,4 @@ Grafana and Prometheus
 * **Set up monitoring integrations** (Grafana and Prometheus) (TBD)
 
 ## Run tests
-`k6 run loadtest.js`
+`k6 run loadtests.js`
