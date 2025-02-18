@@ -18,8 +18,11 @@ It focuses on simulating realistic scenarios for a web application, [Spring PetC
 
 
 ## Monitoring tools
-Grafana and Prometheus
-**(TBD)**
+Grafana & influxdb
+
+## Run Grafana
+* `docker-compose up -d`
+* 
 
 ---
 
@@ -29,3 +32,6 @@ Grafana and Prometheus
 
 ## Run tests
 `k6 run loadtests.js`
+
+## Run tests with Grafana
+`k6 run --out influxdb=http://localhost:8086/k6 loadtests.js`
