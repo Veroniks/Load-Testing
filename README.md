@@ -22,7 +22,8 @@ Grafana & influxdb
 
 ## Run Grafana
 * `docker-compose up -d`
-* 
+* Run tests with Grafana: `k6 run --out influxdb=http://admin:admin123@localhost:8086/k6 loadtests.js`
+* Visualize the results in Grafana at http://localhost:3000
 
 ---
 
@@ -32,6 +33,3 @@ Grafana & influxdb
 
 ## Run tests
 `k6 run loadtests.js`
-
-## Run tests with Grafana
-`k6 run --out influxdb=http://localhost:8086/k6 loadtests.js`
