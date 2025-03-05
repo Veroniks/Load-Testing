@@ -1,0 +1,12 @@
+{
+    "ownerLastName": "Smith",
+    "pet": {
+        "name": "Buddy",
+        "birthDate": "2020-05-05",
+        "typeId": 1
+    },
+    "visit": {
+        "date": "2025-02-01",
+        "description": "Annual Checkup"
+    }
+}
