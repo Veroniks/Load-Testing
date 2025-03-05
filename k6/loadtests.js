@@ -1,6 +1,8 @@
 import http from 'k6/http';
-import { sleep } from 'k6';
-import { check } from 'k6';
+import { sleep, check } from 'k6';
+import config from './config.js';
+
+const data = JSON.parse(open("./data.json"));
 
 export const options = {
   scenarios: {
@@ -33,7 +35,7 @@ export const options = {
 
 // Login Test [Validate the login page's ability to handle concurrent users]
 export function testLogin(){
-  const res = http.get('http://localhost:8080/');
+  const res = http.get(`${config.baseUrl}/`);
   check(res, {
     'status is 200': (r) => r.status === 200,
     'response time is below 500ms': (r) => r.timings.duration < 500,
@@ -43,7 +45,7 @@ export function testLogin(){
 
 // Search Functionality Test [Simulate multiple users searching for an owner by last name]
 export function testSearch() {
-  const res = http.get('http://localhost:8080/owners?lastName=Smith');
+  const res = http.get(`${config.baseUrl}/owners?lastName=${data.ownerLastName}`);
   check(res, {
     'status is 200': (r) => r.status === 200,
     'response time is below 800ms': (r) => r.timings.duration < 800,
@@ -52,13 +54,8 @@ export function testSearch() {
 
 // Create New Pet Test [Test the performance of creating a new pet record by several users at the same time with valid data]
 export function testCreatePet() {
-  const payload = JSON.stringify({
-    name: 'Buddy',
-    birthDate: '2020-05-05',
-    typeId: 1,
-  });
-  const headers = { 'Content-Type': 'application/json' };
-  const res = http.post('http://localhost:8080/owners/1/pets', payload, { headers });
+  const payload = JSON.stringify(data.pet);
+  const res = http.post(`${config.baseUrl}/owners/1/pets`, payload, { headers: config.headers });
   check(res, {
     'status is 201': (r) => r.status === 201,
     'response contains pet name': (r) => r.body.includes('Buddy'),
@@ -67,12 +64,9 @@ export function testCreatePet() {
 
 // Concurrent Visit Scheduling Test
 export function testConcurrentVisitScheduling() {
-  const payload = JSON.stringify({
-    date: '2025-02-01',
-    description: 'Annual Checkup',
-  });
+  const payload = JSON.stringify(data.visit);
   const headers = { 'Content-Type': 'application/json' };
-  const res = http.post('http://localhost:8080/owners/1/pets/1/visits', payload, { headers });
+  const res = http.post(`${config.baseUrl}/owners/1/pets/1/visits`, payload, { headers: config.headers });
   check(res, {
     'status is 201': (r) => r.status === 201,
     'response contains visit date': (r) => r.body.includes('2025-02-01'),
